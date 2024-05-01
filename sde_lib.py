@@ -3,7 +3,7 @@ import abc
 import torch
 import numpy as np
 import diff
-from utils import Reshape, Flatten, Merge
+from utils import *
 
 class SDE(abc.ABC):
   """SDE abstract class. Functions are designed for a mini-batch of inputs."""
