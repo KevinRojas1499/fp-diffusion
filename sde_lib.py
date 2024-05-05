@@ -3,7 +3,30 @@ import abc
 import torch
 import numpy as np
 import diff
-from utils import *
+
+class Reshape(torch.nn.Module):
+    def __init__(self, C, H, W):
+        super(Reshape, self).__init__()
+        self.C = C
+        self.H = H
+        self.W = W
+    def forward(self, x):
+        return x.reshape((x.shape[0], self.C, self.H, self.W))
+class Flatten(torch.nn.Module):
+    def __init__(self):
+        super(Flatten, self).__init__()
+    def forward(self, x):
+        return x.reshape((x.shape[0], -1))
+    
+class Merge(torch.nn.Module):
+    def __init__(self, net):
+        super(Merge, self).__init__()
+        self.net = net
+    def forward(self, x, t):
+        x = Reshape(3, 32, 32)(x)
+        out = self.net(x, t)
+        out = Flatten()(out)
+        return out
 
 class SDE(abc.ABC):
   """SDE abstract class. Functions are designed for a mini-batch of inputs."""

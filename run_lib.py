@@ -305,10 +305,12 @@ def evaluate(config,
       all_losses = []
       eval_iter = iter(eval_ds)  # pytype: disable=wrong-arg-types
       for i, batch in enumerate(eval_iter):
+        print(f'Iteration {i}')
         eval_batch = torch.from_numpy(batch['image']._numpy()).to(config.device).float()
         eval_batch = eval_batch.permute(0, 3, 1, 2)
         eval_batch = scaler(eval_batch)
         eval_loss = eval_step(state, eval_batch)
+        print(eval_loss)
         all_losses.append(eval_loss.item())
         if (i + 1) % 1000 == 0:
           logging.info("Finished %dth step loss evaluation" % (i + 1))

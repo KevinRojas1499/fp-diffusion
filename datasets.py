@@ -15,7 +15,6 @@
 
 # pylint: skip-file
 """Return training and evaluation/test datasets from config files."""
-import jax
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
@@ -80,10 +79,11 @@ def get_dataset(config, uniform_dequantization=False, evaluation=False):
     train_ds, eval_ds, dataset_builder.
   """
   # Compute batch size for this worker.
+  device_count = 1
   batch_size = config.training.batch_size if not evaluation else config.eval.batch_size
-  if batch_size % jax.device_count() != 0:
+  if batch_size % device_count != 0:
     raise ValueError(f'Batch sizes ({batch_size} must be divided by'
-                     f'the number of devices ({jax.device_count()})')
+                     f'the number of devices ({device_count})')
 
   # Reduce this when image resolution is too large and data pointer is stored
   shuffle_buffer_size = 10000
@@ -180,7 +180,7 @@ def get_dataset(config, uniform_dequantization=False, evaluation=False):
     dataset_options.experimental_threading.max_intra_op_parallelism = 1
     read_config = tfds.ReadConfig(options=dataset_options)
     if isinstance(dataset_builder, tfds.core.DatasetBuilder):
-      dataset_builder.download_and_prepare()
+      dataset_builder.download_and_prepare(download_dir='./datasets')
       ds = dataset_builder.as_dataset(
         split=split, shuffle_files=True, read_config=read_config)
     else:

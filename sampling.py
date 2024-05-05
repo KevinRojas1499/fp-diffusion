@@ -21,6 +21,7 @@ import functools
 import torch
 import numpy as np
 import abc
+from tqdm import tqdm
 
 from models.utils import from_flattened_numpy, to_flattened_numpy, get_score_fn
 from scipy import integrate
@@ -400,7 +401,7 @@ def get_pc_sampler(sde, shape, predictor, corrector, inverse_scaler, snr,
       x = sde.prior_sampling(shape).to(device)
       timesteps = torch.linspace(sde.T, eps, sde.N, device=device)
 
-      for i in range(sde.N):
+      for i in tqdm(range(sde.N),leave=False):
         t = timesteps[i]
         vec_t = torch.ones(shape[0], device=t.device) * t
         x, x_mean = corrector_update_fn(x, vec_t, model=model)
