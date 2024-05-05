@@ -2,3 +2,5 @@
 *.zip
 *.pth
 datasets/
+wandb/
+*.png

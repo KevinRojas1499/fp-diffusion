@@ -248,7 +248,7 @@ class VPSDE(SDE):
                 res = torch.linalg.norm(RHS, ord=2) if self.train \
                     else np.linalg.norm(RHS, ord=2) 
             elif self.scalar_fp in ("False"): 
-                print("scalar_fp", self.scalar_fp)
+                # print("scalar_fp", self.scalar_fp)
                 g_pow = (diffusion[:, None])**2           
                 f_dot_s = torch.einsum('bs,bs->b', x, s) 
                 RHS = (g_pow/2) * diff.gradient( div_s + s_l22 + f_dot_s, x)
@@ -270,8 +270,8 @@ class VPSDE(SDE):
                     error = (dsdt - RHS)
                     res = torch.linalg.norm(error, ord=2, dim=1) if self.train \
                         else np.linalg.norm((dsdt - RHS), ord=2, axis=1)
-                    print("dsdt", torch.linalg.norm(dsdt, ord=2, dim=1).mean()) 
-                    print("RHS", torch.linalg.norm(RHS, ord=2, dim=1).mean())  
+                    # print("dsdt", torch.linalg.norm(dsdt, ord=2, dim=1).mean()) 
+                    # print("RHS", torch.linalg.norm(RHS, ord=2, dim=1).mean())  
     
                     res = res ** self.m
                 if self.wgt == 'convention':
@@ -304,7 +304,7 @@ class VPSDE(SDE):
                 RHS = RHS if self.train else RHS.cpu().detach().numpy()
                 scalar_res = torch.linalg.norm(RHS, ord=2) if self.train else np.linalg.norm(RHS, ord=2)       
 
-                print("scalar_fp", self.scalar_fp)
+                # print("scalar_fp", self.scalar_fp)
                 g_pow = (diffusion[:, None])**2           
                 f_dot_s = torch.einsum('bs,bs->b', x, s)                             
                 D = x.shape[-1]
@@ -347,7 +347,7 @@ class VPSDE(SDE):
             
             
             if self.scalar_fp in ("True", "False"):
-                print("FP type {}: {}".format(self.scalar_fp, res.detach().cpu().numpy()), flush=True)
+                # print("FP type {}: {}".format(self.scalar_fp, res.detach().cpu().numpy()), flush=True)
                 return res
             elif self.scalar_fp in ("both"):
                 return scalar_res, vec_res            

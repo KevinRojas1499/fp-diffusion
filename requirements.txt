@@ -8,8 +8,9 @@ tensorboard==2.4.0
 tensorflow-estimator==2.4.0
 tensorflow-probability==0.12.2
 absl-py==0.10.0
-torch==1.8.0
+torch==2.3.0
 torchvision
 ninja
 numpy==1.19.5
 matplotlib
+wandb
